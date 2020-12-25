@@ -4,117 +4,73 @@ const Bodies = Matter.Bodies;
 const Constraint = Matter.Constraint;
 
 var engine, world;
-var box1, pig1,pig3;
-var backgroundImg,platform;
-var bird, slingshot;
-
-var gameState = "onSling";
-var bg = "sprites/bg1.png";
-var score = 0;
-
-function preload() {
-    getBackgroundImg();
-}
+var crane, ground1;
+var block1, block2, block3, block4, block5, block6, block7, block8, block9, block10, block11, block12;
+var chain;
+var wreckingBall;
 
 function setup(){
-    var canvas = createCanvas(1200,400);
+    var canvas = createCanvas(1200,600);
     engine = Engine.create();
     world = engine.world;
 
+    crane = new Ground(200,50,800,20);
+    ground1 = new Ground(600,580,1200,50);
 
-    ground = new Ground(600,height,1200,20);
-    platform = new Ground(150, 305, 300, 170);
+    //Level-1
+    block1 = new Blocks(900,550,100,100);
+    block2 = new Blocks(1000,550,100,100);
+    block3 = new Blocks(1100,550,100,100);
 
-    box1 = new Box(700,320,70,70);
-    box2 = new Box(920,320,70,70);
-    pig1 = new Pig(810, 350);
-    log1 = new Log(810,260,300, PI/2);
+    //Level-2
+    block4 = new Blocks(900,450,100,100);
+    block5 = new Blocks(1000,450,100,100);
+    block6 = new Blocks(1100,450,100,100);
 
-    box3 = new Box(700,240,70,70);
-    box4 = new Box(920,240,70,70);
-    pig3 = new Pig(810, 220);
+    //Level-3
+    block7 = new Blocks(900,350,100,100);
+    block8 = new Blocks(1000,350,100,100);
+    block9 = new Blocks(1100,350,100,100);
 
-    log3 =  new Log(810,180,300, PI/2);
+    //Level-4
+    block10 = new Blocks(900,250,100,100);
+    block11 = new Blocks(1000,250,100,100);
+    block12 = new Blocks(1100,250,100,100);
 
-    box5 = new Box(810,160,70,70);
-    log4 = new Log(760,120,150, PI/7);
-    log5 = new Log(870,120,150, -PI/7);
-
-    bird = new Bird(200,50);
-
-    //log6 = new Log(230,180,80, PI/2);
-    slingshot = new SlingShot(bird.body,{x:200, y:50});
+    wreckingBall = new Wreck(500,400,85);
+    
+    chain = new Chain(wreckingBall.body,{x: 500, y:50});
 }
 
-function draw(){
-    if(backgroundImg)
-        background(backgroundImg);
-    
-        noStroke();
-        textSize(35)
-        fill("white")
-        text("Score  " + score, width-300, 50)
-    
-    Engine.update(engine);
-    //strokeWeight(4);
-    box1.display();
-    box2.display();
-    ground.display();
-    pig1.display();
-    pig1.score();
-    log1.display();
+function draw(){    
+    background(0,0,0);
 
-    box3.display();
-    box4.display();
-    pig3.display();
-    pig3.score();
-    log3.display();
+    Engine.update(engine);  
 
-    box5.display();
-    log4.display();
-    log5.display();
+    crane.display();
+    ground1.display();
 
-    bird.display();
-    platform.display();
-    //log6.display();
-    slingshot.display();    
+    block1.display();
+    block2.display();
+    block3.display();
+
+    block4.display();
+    block5.display();
+    block6.display();
+
+    block7.display();
+    block8.display();
+    block9.display();
+
+    block10.display();
+    block11.display();
+    block12.display();
+
+    wreckingBall.display();
+
+    chain.display();
 }
 
 function mouseDragged(){
-    if (gameState!=="launched"){
-        Matter.Body.setPosition(bird.body, {x: mouseX , y: mouseY});
-    }
-}
-
-
-function mouseReleased(){
-    slingshot.fly();
-    gameState = "launched";
-}
-
-function keyPressed(){
-    if(keyCode === 32){
-       gameState = "onSling";
-       slingshot.attach(bird.body);
-       bird.trajectory = [];
-       Matter.Body.setPosition(bird.body, {x: 200, y: 50});
-    }
-}
-
-async function getBackgroundImg(){
-    var response = await fetch("http://worldtimeapi.org/api/timezone/Asia/Kolkata");
-    var responseJSON = await response.json();
-
-    var datetime = responseJSON.datetime;
-    var hour = datetime.slice(11,13);
-    
-    if(hour>=06 && hour<=19){
-        bg = "sprites/bg1.png";
-    }
-    else{
-        bg = "sprites/bg2.jpg";
-    }
-
-    backgroundImg = loadImage(bg);
-    console.log(backgroundImg);
+    Matter.Body.setPosition(wreckingBall.body, {x: mouseX , y: mouseY});
 }
